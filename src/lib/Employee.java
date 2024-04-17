@@ -21,11 +21,8 @@ public class Employee {
     private int otherMonthlyIncome;
     private int annualDeductible;
 
-    private String spouseName;
-    private String spouseIdNumber;
-
-    private List<String> childNames;
-    private List<String> childIdNumbers;
+    private Spouse spouse;
+    private List<Child> children;
 
     public Employee(String employeeId, String firstName, String lastName, String idNumber, String address, LocalDate joinDate, boolean isForeigner, boolean gender) {
         this.employeeId = employeeId;
@@ -37,8 +34,8 @@ public class Employee {
         this.isForeigner = isForeigner;
         this.gender = gender;
 
-        childNames = new LinkedList<>();
-        childIdNumbers = new LinkedList<>();
+        children = new LinkedList<>();
+        spouse = new Spouse();
     }
 
     public void setMonthlySalary(int grade) {
@@ -64,18 +61,17 @@ public class Employee {
     }
 
     public void setSpouse(String spouseName, String spouseIdNumber) {
-        this.spouseName = spouseName;
-        this.spouseIdNumber = spouseIdNumber;
+        this.spouse.setName(spouseName);
+        this.spouse.setIdNumber(spouseIdNumber);
     }
 
     public void addChild(String childName, String childIdNumber) {
-        childNames.add(childName);
-        childIdNumbers.add(childIdNumber);
+        children.add(new Child(childName, childIdNumber));
     }
 
     public int getAnnualIncomeTax() {
         int monthsWorked = calculateMonthsWorked();
-        return TaxFunction.calculateTax(monthlySalary, otherMonthlyIncome, monthsWorked, annualDeductible, isSpouseIdEmpty(), getChildCount());
+        return TaxFunction.calculateTax(monthlySalary, otherMonthlyIncome, monthsWorked, annualDeductible, spouse.isEmpty(), children.size());
     }
 
     private int calculateMonthsWorked() {
@@ -83,16 +79,37 @@ public class Employee {
 
         if (currentDate.getYear() == joinDate.getYear()) {
             return currentDate.getMonthValue() - joinDate.getMonthValue();
- } else {
+        } else {
             return 12;
         }
     }
+}
 
-    private boolean isSpouseIdEmpty() {
-        return spouseIdNumber.isEmpty();
+class Spouse {
+    private String name;
+    private String idNumber;
+
+    public void setName(String name) {
+        this.name = name;
     }
 
-    private int getChildCount() {
-        return childIdNumbers.size();
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
     }
+
+    public boolean isEmpty() {
+        return name == null || name.isEmpty() || idNumber == null || idNumber.isEmpty();
+    }
+}
+
+class Child {
+    private String name;
+    private String idNumber;
+
+    public Child(String name, String idNumber) {
+        this.name = name;
+        this.idNumber = idNumber;
+    }
+
+    // Getters and Setters (if needed)
 }
