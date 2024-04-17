@@ -24,24 +24,23 @@ public class TaxFunction {
 
         if (numberOfMonthWorking > 12) {
             System.err.println("More than 12 month working per year");
+            return 0; // Jika lebih dari 12 bulan bekerja, pajak dianggap nol
         }
 
-        if (numberOfChildren > MAX_CHILDREN_FOR_TAX_RELIEF) {
-            numberOfChildren = MAX_CHILDREN_FOR_TAX_RELIEF;
-        }
+        // Menyesuaikan jumlah anak jika melebihi batas maksimal
+        numberOfChildren = Math.min(numberOfChildren, MAX_CHILDREN_FOR_TAX_RELIEF);
 
+        // Menghitung total penghasilan tidak kena pajak berdasarkan status perkawinan dan jumlah anak
         int taxRelief = isMarried ? TAX_RELIEF_FOR_MARRIED : TAX_RELIEF_FOR_SINGLE;
         taxRelief += numberOfChildren * TAX_RELIEF_PER_CHILD;
 
+        // Menghitung penghasilan kena pajak
         double taxableIncome = ((monthlySalary + otherMonthlyIncome) * numberOfMonthWorking) - deductible - taxRelief;
+        
+        // Menghitung jumlah pajak
         tax = (int) Math.round(TAX_RATE * taxableIncome);
 
-        if (tax < 0) {
-            return 0;
-        } else {
-            return tax;
-			
-        }
+        // Pajak tidak boleh negatif, jika negatif maka dianggap nol
+        return Math.max(0, tax);
     }
 }
-
