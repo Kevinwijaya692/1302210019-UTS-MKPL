@@ -15,7 +15,7 @@ public class Employee {
     private LocalDate joinDate;
 
     private boolean isForeigner;
-    private boolean gender;
+    private boolean isMale; // Mengganti nama variabel gender menjadi isMale untuk lebih jelas
 
     private int monthlySalary;
     private int otherMonthlyIncome;
@@ -24,7 +24,7 @@ public class Employee {
     private Spouse spouse;
     private List<Child> children;
 
-    public Employee(String employeeId, String firstName, String lastName, String idNumber, String address, LocalDate joinDate, boolean isForeigner, boolean gender) {
+    public Employee(String employeeId, String firstName, String lastName, String idNumber, String address, LocalDate joinDate, boolean isForeigner, boolean isMale) {
         this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -32,7 +32,7 @@ public class Employee {
         this.address = address;
         this.joinDate = joinDate;
         this.isForeigner = isForeigner;
-        this.gender = gender;
+        this.isMale = isMale; // Mengubah nama variabel gender menjadi isMale
 
         children = new LinkedList<>();
         spouse = new Spouse();
@@ -111,5 +111,4 @@ class Child {
         this.idNumber = idNumber;
     }
 
-    // Getters and Setters (if needed)
 }
