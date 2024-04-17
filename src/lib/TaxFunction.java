@@ -20,27 +20,29 @@ public class TaxFunction {
      */
     public static int calculateTax(int monthlySalary, int otherMonthlyIncome, int numberOfMonthWorking, int deductible, boolean isMarried, int numberOfChildren) {
 
-        int tax = 0;
-
         if (numberOfMonthWorking > 12) {
             System.err.println("More than 12 month working per year");
             return 0; // Jika lebih dari 12 bulan bekerja, pajak dianggap nol
         }
 
-        // Menyesuaikan jumlah anak jika melebihi batas maksimal
-        numberOfChildren = Math.min(numberOfChildren, MAX_CHILDREN_FOR_TAX_RELIEF);
-
-        // Menghitung total penghasilan tidak kena pajak berdasarkan status perkawinan dan jumlah anak
-        int taxRelief = isMarried ? TAX_RELIEF_FOR_MARRIED : TAX_RELIEF_FOR_SINGLE;
-        taxRelief += numberOfChildren * TAX_RELIEF_PER_CHILD;
-
-        // Menghitung penghasilan kena pajak
-        double taxableIncome = ((monthlySalary + otherMonthlyIncome) * numberOfMonthWorking) - deductible - taxRelief;
-        
-        // Menghitung jumlah pajak
-        tax = (int) Math.round(TAX_RATE * taxableIncome);
+        int taxRelief = calculateTaxRelief(isMarried, numberOfChildren);
+        double taxableIncome = calculateTaxableIncome(monthlySalary, otherMonthlyIncome, numberOfMonthWorking, deductible, taxRelief);
+        int tax = calculateTaxAmount(taxableIncome);
 
         // Pajak tidak boleh negatif, jika negatif maka dianggap nol
         return Math.max(0, tax);
+    }
+
+    private static int calculateTaxRelief(boolean isMarried, int numberOfChildren) {
+        int taxRelief = isMarried ? TAX_RELIEF_FOR_MARRIED : TAX_RELIEF_FOR_SINGLE;
+        return taxRelief + Math.min(numberOfChildren, MAX_CHILDREN_FOR_TAX_RELIEF) * TAX_RELIEF_PER_CHILD;
+    }
+
+    private static double calculateTaxableIncome(int monthlySalary, int otherMonthlyIncome, int numberOfMonthWorking, int deductible, int taxRelief) {
+        return ((monthlySalary + otherMonthlyIncome) * numberOfMonthWorking) - deductible - taxRelief;
+    }
+
+    private static int calculateTaxAmount(double taxableIncome) {
+        return (int) Math.round(TAX_RATE * taxableIncome);
     }
 }
