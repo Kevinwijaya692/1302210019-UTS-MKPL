@@ -12,10 +12,7 @@ public class Employee {
     private String idNumber;
     private String address;
 
-    private int yearJoined;
-    private int monthJoined;
-    private int dayJoined;
-    private int monthWorkingInYear;
+    private LocalDate joinDate;
 
     private boolean isForeigner;
     private boolean gender;
@@ -30,20 +27,18 @@ public class Employee {
     private List<String> childNames;
     private List<String> childIdNumbers;
 
-    public Employee(String employeeId, String firstName, String lastName, String idNumber, String address, int yearJoined, int monthJoined, int dayJoined, boolean isForeigner, boolean gender) {
+    public Employee(String employeeId, String firstName, String lastName, String idNumber, String address, LocalDate joinDate, boolean isForeigner, boolean gender) {
         this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.idNumber = idNumber;
         this.address = address;
-        this.yearJoined = yearJoined;
-        this.monthJoined = monthJoined;
-        this.dayJoined = dayJoined;
+        this.joinDate = joinDate;
         this.isForeigner = isForeigner;
         this.gender = gender;
 
-        childNames = new LinkedList<String>();
-        childIdNumbers = new LinkedList<String>();
+        childNames = new LinkedList<>();
+        childIdNumbers = new LinkedList<>();
     }
 
     public void setMonthlySalary(int grade) {
@@ -86,9 +81,9 @@ public class Employee {
     private int calculateMonthsWorked() {
         LocalDate currentDate = LocalDate.now();
 
-        if (currentDate.getYear() == yearJoined) {
-            return currentDate.getMonthValue() - monthJoined;
-        } else {
+        if (currentDate.getYear() == joinDate.getYear()) {
+            return currentDate.getMonthValue() - joinDate.getMonthValue();
+ } else {
             return 12;
         }
     }
